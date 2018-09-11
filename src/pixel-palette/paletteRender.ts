@@ -1,6 +1,7 @@
 import Palette from "./palette";
 import './palette.scss';
 import { create, createInput } from "./htmlHelper";
+import Colour from "./colour";
 
 export default class PaletteRender
 {
@@ -22,21 +23,21 @@ export default class PaletteRender
         dim1Slider.min = '0';
         dim1Slider.max = `${this.palette.dim1Size - 1}`;
         dim1Slider.value = '0';
-        dim1Slider.addEventListener('change', () => {this.dim1Offset = parseInt(dim1Slider.value); this.render();});
+        dim1Slider.addEventListener('change', () => {this.dim1Offset = parseInt(dim1Slider.value); this.update();});
         this.el.appendChild(dim1Slider);
         
         const dim2Slider = createInput('range');
         dim2Slider.min = '0';
         dim2Slider.max = `${this.palette.dim2Size - 1}`;
         dim2Slider.value = '0';
-        dim2Slider.addEventListener('change', () => {this.dim2Offset = parseInt(dim2Slider.value); this.render();});
+        dim2Slider.addEventListener('change', () => {this.dim2Offset = parseInt(dim2Slider.value); this.update();});
         this.el.appendChild(dim2Slider);
         
         const dim3Slider = createInput('range');
         dim3Slider.min = '0';
         dim3Slider.max = `${this.palette.dim3Size - 1}`;
         dim3Slider.value = '0';
-        dim3Slider.addEventListener('change', () => {this.dim3Offset = parseInt(dim3Slider.value); this.render();});
+        dim3Slider.addEventListener('change', () => {this.dim3Offset = parseInt(dim3Slider.value); this.update();});
         this.el.appendChild(dim3Slider);
 
         this.render();
@@ -44,22 +45,13 @@ export default class PaletteRender
 
     render()
     {
-        const currentItems = this.el.getElementsByClassName('palette__colour');
-        //for (let item of currentItems)
-        for (let i = currentItems.length - 1; i >= 0; i--)
-        {
-            currentItems[i].remove();
-        }
-
         for (let i = 0; i < 256; i++)
         {
             const colour = this.palette.getColour(i, this.dim1Offset, this.dim2Offset, this.dim3Offset);
             const colourEl = create('label', 'palette__colour');
-            colourEl.style.backgroundColor = `rgb(${colour.red}, ${colour.green}, ${colour.blue})`;
 
             const inputEl = create('input');
             inputEl.type = 'color';
-            inputEl.value = `#${colour.toHexString()}`;
             colourEl.appendChild(inputEl);
 
             inputEl.addEventListener('change', (e) =>
@@ -74,7 +66,30 @@ export default class PaletteRender
                 colour.blue = blue;
             });
 
+            this.baseColours[i] = colourEl;
+
+            this.updateItem(i, colour);
+
             this.el.appendChild(colourEl);
         }
+    }
+
+    update()
+    {
+        for (let i = 0; i < 256; i++)
+        {
+            const colour = this.palette.getColour(i, this.dim1Offset, this.dim2Offset, this.dim3Offset);
+            this.updateItem(i, colour);
+        }
+    }
+
+    updateItem(index: number, colour: Colour)
+    {
+        const colourEl = this.baseColours[index];
+
+        colourEl.style.backgroundColor = `rgb(${colour.red}, ${colour.green}, ${colour.blue})`;
+
+        const inputEl = colourEl.querySelector('input');
+        inputEl.value = `#${colour.toHexString()}`;
     }
 }
