@@ -1,0 +1,16 @@
+.palette {
+    display: block;
+    max-width: 14px * 16;
+
+    &__colour {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border: 1px solid #333;
+        margin: 2px;
+
+        & input {
+            display: none;
+        }
+    }
+}

@@ -2,6 +2,7 @@ import 'milligram/dist/milligram.css';
 import Palette from './pixel-palette/palette';
 import Image from './pixel-palette/image';
 import Colour from './pixel-palette/colour';
+import PaletteRender from './pixel-palette/paletteRender';
 
 interface Position
 {
@@ -35,6 +36,8 @@ palette.setColour(new Colour(0, 0, 88), 2, 2);
 palette.setColour(new Colour(88, 88, 88), 3, 2);
 
 const image = new Image(4, 4, [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3], palette);
+const paletteRender = new PaletteRender(palette);
+document.body.appendChild(paletteRender.el);
 
 let offset = 0;
 
@@ -72,7 +75,6 @@ canvas.addEventListener('mousedown', (e) =>
 
 canvas.addEventListener('mousemove', (e) =>
     {
-        console.log(isMouseDown);
         if (!isMouseDown)
         {
             return;

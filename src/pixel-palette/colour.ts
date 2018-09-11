@@ -1,3 +1,13 @@
+function toHex(input: number)
+{
+    let result = input.toString(16);
+    if (result.length < 2)
+    {
+        return `0${result}`;
+    }
+    return result;
+}
+
 export default class Colour
 {
     public static readonly empty: Colour = new Colour(255, 0, 255, 127);
@@ -13,5 +23,10 @@ export default class Colour
         this.green = green;
         this.blue = blue;
         this.alpha = alpha;
+    }
+
+    toHexString(): string
+    {
+        return toHex(this.red) + toHex(this.green) + toHex(this.blue);
     }
 }
