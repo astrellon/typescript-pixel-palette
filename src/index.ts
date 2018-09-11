@@ -12,7 +12,7 @@ interface Position
 
 const canvas = document.getElementById('editor') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d');
-const scale = 10;
+const scale = 20;
 ctx.scale(scale, scale);
 ctx.strokeStyle = 'black';
 
