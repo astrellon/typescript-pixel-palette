@@ -45,6 +45,9 @@ export default class PaletteRender
 
     render()
     {
+        const colourHolderEl = create('div', 'palette__colours');
+        this.el.appendChild(colourHolderEl);
+
         for (let i = 0; i < 256; i++)
         {
             const colour = this.palette.getColour(i, this.dim1Offset, this.dim2Offset, this.dim3Offset);
@@ -70,7 +73,7 @@ export default class PaletteRender
 
             this.updateItem(i, colour);
 
-            this.el.appendChild(colourEl);
+            colourHolderEl.appendChild(colourEl);
         }
     }
 

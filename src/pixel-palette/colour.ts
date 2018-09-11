@@ -29,4 +29,8 @@ export default class Colour
     {
         return toHex(this.red) + toHex(this.green) + toHex(this.blue);
     }
+    toRgbString(): string
+    {
+        return `rgb(${this.red}, ${this.green}, ${this.blue})`;
+    }
 }
