@@ -4,6 +4,10 @@ import Image from './pixel-palette/image';
 import Colour from './pixel-palette/colour';
 import PaletteRender from './pixel-palette/paletteRender';
 import ImageRender from './pixel-palette/imageRender';
+import { create } from './pixel-palette/htmlHelper';
+import PaletteSerialiser from './pixel-palette/paletteSerialiser';
+import './style.scss';
+import ImageSerialiser from './pixel-palette/imageSerialiser';
 
 const palette = new Palette(4, 3);
 palette.setColour(new Colour(255, 0, 0), 0);
@@ -21,9 +25,20 @@ palette.setColour(new Colour(0, 88, 0), 1, 2);
 palette.setColour(new Colour(0, 0, 88), 2, 2);
 palette.setColour(new Colour(88, 88, 88), 3, 2);
 
+const saveEl = create('button');
+saveEl.innerText = 'Save';
+document.body.appendChild(saveEl);
+saveEl.addEventListener('click', () =>
+{
+    var paletteJson = JSON.stringify(PaletteSerialiser.serialiseJson(palette));
+    var imageJson = JSON.stringify(ImageSerialiser.serialiseJson(image));
+    console.log('Palette', paletteJson, paletteJson.length, 'Image', imageJson, imageJson.length);
+});
+
 const image = new Image(4, 4, [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3], palette);
 const imageRender = new ImageRender(image);
 const paletteRender = new PaletteRender(palette);
+
 document.body.appendChild(imageRender.el);
 document.body.appendChild(paletteRender.el);
 
