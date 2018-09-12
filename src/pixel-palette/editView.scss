@@ -1,0 +1,18 @@
+.edit-view {
+    position: relative;
+    display: block;
+
+    &__preview {
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        z-index: 1;
+    }
+
+    &__contents {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}

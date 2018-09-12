@@ -1,13 +1,16 @@
 import 'milligram/dist/milligram.css';
-import Palette from './pixel-palette/palette';
-import Image from './pixel-palette/image';
-import Colour from './pixel-palette/colour';
-import PaletteRender from './pixel-palette/paletteRender';
-import ImageRender from './pixel-palette/imageRender';
-import { create } from './pixel-palette/htmlHelper';
-import PaletteSerialiser from './pixel-palette/paletteSerialiser';
 import './style.scss';
+
+import Colour from './pixel-palette/colour';
+import Palette from './pixel-palette/palette';
+import PaletteRender from './pixel-palette/paletteRender';
+import PaletteSerialiser from './pixel-palette/paletteSerialiser';
+import Image from './pixel-palette/image';
+import ImageRender from './pixel-palette/imageRender';
 import ImageSerialiser from './pixel-palette/imageSerialiser';
+import { create } from './pixel-palette/htmlHelper';
+import EditView from './pixel-palette/editView';
+import PaintingTool from './pixel-palette/paintingTool';
 
 const palette = new Palette(4, 3);
 palette.setColour(new Colour(255, 0, 0), 0);
@@ -38,8 +41,13 @@ saveEl.addEventListener('click', () =>
 const image = new Image(4, 4, [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3], palette);
 const imageRender = new ImageRender(image);
 const paletteRender = new PaletteRender(palette);
+const editView = new EditView();
+editView.setImage(imageRender);
 
-document.body.appendChild(imageRender.el);
+const paintingTool = new PaintingTool();
+editView.currentTool = paintingTool;
+
+document.body.appendChild(editView.el);
 document.body.appendChild(paletteRender.el);
 
 let offset = 0;
