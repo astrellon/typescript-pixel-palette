@@ -11,6 +11,9 @@ import ImageSerialiser from './pixel-palette/imageSerialiser';
 import { create } from './pixel-palette/htmlHelper';
 import EditView from './pixel-palette/editView';
 import PaintingTool from './pixel-palette/paintingTool';
+import PaletteRender2 from './pixel-palette/paletteRender2';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const palette = new Palette(4, 3);
 palette.setColour(new Colour(255, 0, 0), 0);
@@ -27,7 +30,17 @@ palette.setColour(new Colour(88, 0, 0), 0, 2);
 palette.setColour(new Colour(0, 88, 0), 1, 2);
 palette.setColour(new Colour(0, 0, 88), 2, 2);
 palette.setColour(new Colour(88, 88, 88), 3, 2);
+const image = new Image(4, 4, [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3], palette);
 
+ReactDOM.render(
+    <div>
+        <h1>Pixel Palette</h1>
+        <PaletteRender2 palette={palette} />
+    </div>,
+    document.getElementById('root');
+);
+
+/*
 const saveEl = create('button');
 saveEl.innerText = 'Save';
 document.body.appendChild(saveEl);
@@ -38,7 +51,6 @@ saveEl.addEventListener('click', () =>
     console.log('Palette', paletteJson, paletteJson.length, 'Image', imageJson, imageJson.length);
 });
 
-const image = new Image(4, 4, [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3], palette);
 const imageRender = new ImageRender(image);
 const paletteRender = new PaletteRender(palette);
 const editView = new EditView();
@@ -63,3 +75,4 @@ function animate()
     setTimeout(animate, 500);
 }
 animate();
+*/
