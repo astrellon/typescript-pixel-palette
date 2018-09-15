@@ -1,11 +1,11 @@
 .palette {
     display: block;
-    max-width: 14px * 16;
+    max-width: 20px * 16;
 
     &__colour {
         display: inline-block;
-        width: 10px;
-        height: 10px;
+        width: 16px;
+        height: 16px;
         border: 1px solid #333;
         margin: 2px;
 

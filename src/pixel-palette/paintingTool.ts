@@ -5,7 +5,7 @@ export default class PaintingTool implements EditTool
 {
     onMouseDown(editView: EditView, position: Position)
     {
-        editView.imageRender.image.setPixel(position.x, position.y, 1);
+        editView.props.image.setPixel(position.x, position.y, 1);
     }
 
     onMouseUp(editView: EditView, mouseDownPosition: Position, mouseUpPosition: Position)
@@ -33,7 +33,7 @@ export default class PaintingTool implements EditTool
 
         while (true)
         {
-            editView.imageRender.image.setPixel(currentX, currentY, 1);
+            editView.props.image.setPixel(currentX, currentY, 1);
 
             if (currentX === currentPosition.x && currentY === currentPosition.y)
             {

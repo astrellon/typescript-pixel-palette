@@ -11,3 +11,15 @@ export function createInput(type: string, className: string = ''): HTMLInputElem
     el.type = type;
     return el;
 }
+
+export function render(input: string): HTMLElement
+{
+    const template = document.createElement('template');
+    template.innerHTML = input;
+    if (template.content == null || template.content.firstElementChild == null)
+    {
+        throw new Error('Invalid html template to render');
+    }
+
+    return template.content.firstElementChild as HTMLElement;
+}
