@@ -30,6 +30,7 @@ export default class EditView extends React.Component<Props, State>
     prevPos: Position = {x:0, y:0}
     mouseDownPos: Position = {x:0, y:0}
     isMouseDown: boolean = false;
+    selectedColour: number = 0;
 
     constructor(props)
     {
@@ -97,6 +98,11 @@ export default class EditView extends React.Component<Props, State>
         }
     }
 
+    selectColour(baseColour: number)
+    {
+        this.selectedColour = baseColour;
+    }
+
     render()
     {
         return <div className="edit-view">
@@ -128,7 +134,9 @@ export default class EditView extends React.Component<Props, State>
                     dim1Offset={this.state.dim1Offset} 
                     dim2Offset={this.state.dim2Offset} 
                     dim3Offset={this.state.dim3Offset}
-                    onUpdate={() => this.forceUpdate()} />
+                    onUpdate={() => this.forceUpdate()} 
+                    onSelect={(baseColour) => this.selectColour(baseColour)}
+                    />
             </div>
     }
 }
