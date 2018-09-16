@@ -1,10 +1,14 @@
 import React from "react";
 import Image from "./image";
 import "./image.scss";
+import { ImageState, PaletteState, toRgbString } from "./store/pixelStore";
+import Palette from "./palette";
+import Colour from "./colour";
 
 interface Props
 {
-    image: Image,
+    image: ImageState,
+    palette: PaletteState,
     dim1Offset?: number,
     dim2Offset?: number,
     dim3Offset?: number,
@@ -18,6 +22,7 @@ export default class ImageRender extends React.Component<Props, State>
 {
     static defaultProps: Props = {
         image: null,
+        palette: null,
         dim1Offset: 0,
         dim2Offset: 0,
         dim3Offset: 0,
@@ -63,9 +68,10 @@ export default class ImageRender extends React.Component<Props, State>
         for (let x = 0; x < this.props.image.width; x++)
         {
             const index = this.props.image.pixelIndices[i++];
-            const colour = this.props.image.palette.getColour(index, this.props.dim1Offset, this.props.dim2Offset, this.props.dim3Offset);
+            const paletteIndex = Palette.makeIndex(index, this.props.dim1Offset, this.props.dim2Offset, this.props.dim3Offset);
+            const colour = this.props.palette.colourMap[paletteIndex] || this.props.palette[index] || {red: 255, green: 0, blue: 255, alpha: 255};
 
-            ctx.fillStyle = colour.toRgbString();
+            ctx.fillStyle = toRgbString(colour);
             ctx.fillRect(x, y, 1, 1);
         }
     }

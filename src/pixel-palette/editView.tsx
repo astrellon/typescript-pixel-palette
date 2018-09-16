@@ -4,6 +4,7 @@ import Palette from "./palette";
 import ImageRender from "./imageRender";
 import PaletteRender from "./paletteRender";
 import EditTool from "./editTool";
+import { ImageState, PaletteState } from "./store/pixelStore";
 
 export interface Position
 {
@@ -13,8 +14,8 @@ export interface Position
 
 interface Props
 {
-    image: Image,
-    palette: Palette,
+    image: ImageState,
+    palette: PaletteState,
     currentTool: EditTool,
 }
 interface State
@@ -111,7 +112,7 @@ export default class EditView extends React.Component<Props, State>
                     onMouseMove={(e) => this.onMouseMove(e)}
                     onMouseUp={(e) => this.onMouseUp(e)} >
 
-                    <ImageRender image={this.props.image}  dim1Offset={this.state.dim1Offset} dim2Offset={this.state.dim2Offset} dim3Offset={this.state.dim3Offset}/>
+                    <ImageRender image={this.props.image}  palette={this.props.palette} dim1Offset={this.state.dim1Offset} dim2Offset={this.state.dim2Offset} dim3Offset={this.state.dim3Offset}/>
                 </div>
 
                 <label>

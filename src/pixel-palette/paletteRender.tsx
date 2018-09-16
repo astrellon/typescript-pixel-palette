@@ -3,12 +3,13 @@ import React, { ChangeEvent, MouseEventHandler } from "react";
 import Colour from "./colour";
 
 import './palette.scss';
+import { PaletteState, store, UpdateColour, toRgbString, toHexString } from "./store/pixelStore";
 
 export type SelectCallback = (baseColour: number) => void;
 
 interface Props
 {
-    palette: Palette,
+    palette: PaletteState,
     dim1Offset?: number,
     dim2Offset?: number,
     dim3Offset?: number,
@@ -22,7 +23,7 @@ interface State
 
 interface ColourProps
 {
-    palette: Palette,
+    palette: PaletteState,
     index: number,
     onClick: MouseEventHandler<HTMLDivElement>
 }
@@ -42,22 +43,23 @@ class PaletteColour extends React.PureComponent<ColourProps>
                 const green = Number.parseInt(value.substr(3, 2), 16);
                 const blue = Number.parseInt(value.substr(5, 2), 16);
 
-                const newColour = new Colour(red, green, blue, 255);
-                this.props.palette.setColourIndex(newColour, this.props.index);
+                const newColour = {red, green, blue, alpha: 255};
+                store.dispatch(UpdateColour.action(this.props.index, newColour))
+                //this.props.palette.setColourIndex(newColour, this.props.index);
             });
     }
 
     render()
     {
-        const colour = this.props.palette.getColourIndex(this.props.index);
+        const colour = this.props.palette.colourMap[this.props.index];
         const style = {
-            backgroundColor: colour.toRgbString()
+            backgroundColor: toRgbString(colour)
         };
         
         return <div className="palette-colour" style={style} onClick={(e) => this.props.onClick(e)}>
-                <div ref="preview" className="palette-colour__preview" style={{backgroundColor: colour.toRgbString()}}></div>
+                <div ref="preview" className="palette-colour__preview" style={{backgroundColor: toRgbString(colour)}}></div>
                 <label className="palette-colour__prefs">
-                    <input type="color" defaultValue={'#' + colour.toHexString()} ref={node => this.input = node} />
+                    <input type="color" defaultValue={'#' + toHexString(colour)} ref={node => this.input = node} />
                 </label>
             </div>
     }
@@ -78,25 +80,13 @@ export default class PaletteRender extends React.Component<Props, State>
         super(props);
     }
 
-    componentDidUpdate()
-    {
-        if (this.props.onUpdate)
-        {
-            this.props.palette.onUpdateCallback = this.props.onUpdate;
-        }
-        else
-        {
-            this.props.palette.onUpdateCallback = doNothing;
-        }
-    }
-
     renderColours(): JSX.Element[]
     {
         const result = [];
 
         for (let i = 0; i < 256; i++)
         {
-            if (this.props.palette.hasBaseColour(i))
+            if (this.props.palette.colourMap[i])
             {
                 const index = Palette.makeIndex(i, this.props.dim1Offset, this.props.dim2Offset, this.props.dim3Offset);
                 result.push(
