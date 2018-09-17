@@ -11,7 +11,10 @@ import Image from './pixel-palette/image';
 import ImageSerialiser from './pixel-palette/imageSerialiser';
 import PaintingTool from './pixel-palette/paintingTool';
 import EditView from './pixel-palette/editView';
-import { store, UpdateColour, ResizeImage, SetPixel, SetPixels } from './pixel-palette/store/pixelStore';
+import { store } from './pixel-palette/store/pixelStore';
+import { UpdateColour } from './pixel-palette/store/updateColour';
+import { ResizeImage } from './pixel-palette/store/resizeImage';
+import { SetPixels } from './pixel-palette/store/setPixels';
 
 const paintingTool = new PaintingTool();
 
