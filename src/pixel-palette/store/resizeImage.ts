@@ -24,6 +24,10 @@ export class ResizeImage extends Reducer<State>
     {
         const newImage = {...state.image, width: action.width, height: action.height};
         const pixels: number[]= new Array<number>(action.width * action.height);
+        for (let i = 0; i < pixels.length; i++)
+        {
+            pixels[i] = 0;
+        }
 
         const minWidth = Math.min(state.image.width, action.width);
         const minHeight = Math.min(state.image.height, action.height);

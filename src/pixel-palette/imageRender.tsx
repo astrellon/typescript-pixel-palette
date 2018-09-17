@@ -1,9 +1,7 @@
 import React from "react";
-import Image from "./image";
-import "./image.scss";
 import { ImageState, PaletteState, toRgbString } from "./store/pixelStore";
 import Palette from "./palette";
-import Colour from "./colour";
+import "./image.scss";
 
 interface Props
 {

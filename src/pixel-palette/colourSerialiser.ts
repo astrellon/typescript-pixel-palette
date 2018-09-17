@@ -1,9 +1,9 @@
-import Colour from "./colour";
+import { ColourState, toHexAlphaString } from "./store/pixelStore";
 
 export default class ColourSerialiser
 {
-    static serialiseJson(colour: Colour)
+    static serialiseJson(colour: ColourState)
     {
-        return colour.toHexAlphaString();
+        return toHexAlphaString(colour);
     }
 }

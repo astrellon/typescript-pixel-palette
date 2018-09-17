@@ -35,8 +35,8 @@ function render(state)
             <EditView image={state.image} palette={state.palette} currentTool={paintingTool} />
             <button onClick={() =>
             {
-                //console.log('Palette', PaletteSerialiser.serialiseJson(palette));
-                //console.log('Image', ImageSerialiser.serialiseJson(image));
+                console.log('Palette', PaletteSerialiser.serialiseJson(state.palette));
+                console.log('Image', ImageSerialiser.serialiseJson(state.image));
             }}>Save</button>
         </div>,
         document.getElementById('root')

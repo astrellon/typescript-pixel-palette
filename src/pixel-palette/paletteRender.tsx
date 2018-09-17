@@ -1,9 +1,9 @@
-import Palette, { UpdateCallback, doNothing } from "./palette";
 import React, { ChangeEvent, MouseEventHandler } from "react";
-import Colour from "./colour";
 
 import './palette.scss';
-import { PaletteState, store, UpdateColour, toRgbString, toHexString } from "./store/pixelStore";
+import { PaletteState, store, toRgbString, toHexString } from "./store/pixelStore";
+import { UpdateColour } from "./store/updateColour";
+import Palette from "./palette";
 
 export type SelectCallback = (baseColour: number) => void;
 
@@ -13,7 +13,6 @@ interface Props
     dim1Offset?: number,
     dim2Offset?: number,
     dim3Offset?: number,
-    onUpdate?: UpdateCallback,
     onSelect?: SelectCallback
 }
 
@@ -25,7 +24,6 @@ interface ColourProps
 {
     palette: PaletteState,
     index: number,
-    onClick: MouseEventHandler<HTMLDivElement>
 }
 
 class PaletteColour extends React.PureComponent<ColourProps>
@@ -45,7 +43,6 @@ class PaletteColour extends React.PureComponent<ColourProps>
 
                 const newColour = {red, green, blue, alpha: 255};
                 store.dispatch(UpdateColour.action(this.props.index, newColour))
-                //this.props.palette.setColourIndex(newColour, this.props.index);
             });
     }
 
@@ -56,8 +53,8 @@ class PaletteColour extends React.PureComponent<ColourProps>
             backgroundColor: toRgbString(colour)
         };
         
-        return <div className="palette-colour" style={style} onClick={(e) => this.props.onClick(e)}>
-                <div ref="preview" className="palette-colour__preview" style={{backgroundColor: toRgbString(colour)}}></div>
+        return <div className="palette-colour" style={style} data-index={this.props.index}>
+                <div ref="preview" className="palette-colour__preview"></div>
                 <label className="palette-colour__prefs">
                     <input type="color" defaultValue={'#' + toHexString(colour)} ref={node => this.input = node} />
                 </label>
@@ -94,7 +91,6 @@ export default class PaletteRender extends React.Component<Props, State>
                         key={index} 
                         palette={this.props.palette} 
                         index={index} 
-                        onClick={(e) => {this.props.onSelect(i)}}
                         />);
             }
         }
@@ -105,7 +101,7 @@ export default class PaletteRender extends React.Component<Props, State>
     render()
     {
            return (
-               <div>
+               <div onClick={(e) => console.log((e.target as HTMLElement).closest('.palette-colour'))}>
                 { this.renderColours() }
                </div>
            )

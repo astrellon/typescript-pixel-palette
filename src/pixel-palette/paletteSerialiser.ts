@@ -1,14 +1,14 @@
-import Palette from "./palette";
 import ColourSerialiser from "./colourSerialiser";
+import { PaletteState } from "./store/pixelStore";
 
 export default class PaletteSerialiser
 {
-    static serialiseJson(palette: Palette)
+    static serialiseJson(palette: PaletteState)
     {
         const colours = {};
-        for (let key in palette.colours)
+        for (let key in palette.colourMap)
         {
-            colours[key] = ColourSerialiser.serialiseJson(palette.colours[key]);
+            colours[key] = ColourSerialiser.serialiseJson(palette.colourMap[key]);
         }
 
         const result = {

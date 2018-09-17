@@ -1,9 +1,8 @@
-import Image from "./image";
-import ColourSerialiser from "./colourSerialiser";
+import { ImageState } from "./store/pixelStore";
 
 export default class ImageSerialiser
 {
-    static serialiseJson(image: Image)
+    static serialiseJson(image: ImageState)
     {
         const result = {
             'width': image.width,
