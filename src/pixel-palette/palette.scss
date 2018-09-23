@@ -16,6 +16,10 @@
         }
     }
 
+    &__selected {
+        border: 1px solid white;
+    }
+
     &__prefs {
         display: none;
         background: red;

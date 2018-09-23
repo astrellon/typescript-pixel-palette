@@ -1,13 +1,13 @@
 import EditView, { Position } from "./editView";
 import EditTool from "./editTool";
-import { store, SetPixel } from "./store/pixelStore";
+import { store } from "./store/pixelStore";
+import { SetPixel } from "./store/setPixel";
 
 export default class PaintingTool implements EditTool
 {
     onMouseDown(editView: EditView, position: Position)
     {
-        //editView.props.image.setPixel(position.x, position.y, editView.selectedColour);
-        store.dispatch(SetPixel.action(position.x, position.y, editView.selectedColour));
+        store.dispatch(SetPixel.action(position.x, position.y, editView.state.selectedIndex));
     }
 
     onMouseUp(editView: EditView, mouseDownPosition: Position, mouseUpPosition: Position)
@@ -35,8 +35,7 @@ export default class PaintingTool implements EditTool
 
         while (true)
         {
-            //editView.props.image.setPixel(currentX, currentY, editView.selectedColour);
-            store.dispatch(SetPixel.action(currentX, currentY, editView.selectedColour));
+            store.dispatch(SetPixel.action(currentX, currentY, editView.state.selectedIndex));
 
             if (currentX === currentPosition.x && currentY === currentPosition.y)
             {
