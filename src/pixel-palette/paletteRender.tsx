@@ -1,12 +1,12 @@
-import React, { ChangeEvent, MouseEventHandler, ReactElement } from "react";
+import React from "react";
 import ColorPicker from "react-simple-colorpicker";
-
-import './palette.scss';
 import { PaletteState, store, toRgbString, toHexString } from "./store/pixelStore";
 import { UpdateColour } from "./store/updateColour";
 import Palette from "./palette";
 import * as PureColour from "pure-color";
 import Colour from "./colour";
+
+import './palette.scss';
 
 export type SelectCallback = (baseColour: number) => void;
 
@@ -24,54 +24,6 @@ export interface Props
     onSelect?: SelectCallback,
     editColours: boolean,
 }
-
-interface State
-{
-}
-
-/*
-interface ColourProps
-{
-    palette: PaletteState,
-    index: number,
-}
-
-class PaletteColour extends React.PureComponent<ColourProps>
-{
-    input: HTMLInputElement;
-
-    componentDidMount()
-    {
-        this.input.addEventListener('change', (e: any) =>
-            {
-                const value = e.target.value;
-                (this.refs.preview as HTMLElement).style.backgroundColor = value;
-
-                const red = Number.parseInt(value.substr(1, 2), 16);
-                const green = Number.parseInt(value.substr(3, 2), 16);
-                const blue = Number.parseInt(value.substr(5, 2), 16);
-
-                const newColour = {red, green, blue, alpha: 255};
-                store.dispatch(UpdateColour.action(this.props.index, newColour))
-            });
-    }
-
-    render()
-    {
-        const colour = this.props.palette.colourMap[this.props.index];
-        const style = {
-            backgroundColor: toRgbString(colour)
-        };
-        
-        return <div className="palette-colour" style={style} data-index={this.props.index}>
-                <div ref="preview" className="palette-colour__preview"></div>
-                <label className="palette-colour__prefs">
-                    <input type="color" defaultValue={`#${toHexString(colour)}`} ref={node => this.input = node} />
-                </label>
-            </div>
-    }
-}
-*/
 
 class PaletteColours extends React.PureComponent<ColoursProps>
 {
@@ -102,14 +54,14 @@ class PaletteColours extends React.PureComponent<ColoursProps>
     render()
     {
            return (
-               <div>
+               <>
                 { this.renderColours() }
-               </div>
+               </>
            )
     }
 }
 
-export default class PaletteRender extends React.Component<Props, State>
+export default class PaletteRender extends React.Component<Props>
 {
     static defaultProps: Props = {
         colourProps: {

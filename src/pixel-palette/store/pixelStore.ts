@@ -4,6 +4,7 @@ import { UpdateColour } from "./updateColour";
 import { ResizeImage } from "./resizeImage";
 import { SetPixel } from "./setPixel";
 import { SetPixels } from "./setPixels";
+import { UpdateUIState } from "./updateUIState";
 
 export interface ImageState
 {
@@ -52,10 +53,16 @@ export interface PaletteState
     dim3Size: number;
 }
 
+export interface UIState
+{
+    showResizeModal: boolean;
+}
+
 export interface State
 {
     image: ImageState;
     palette: PaletteState;
+    uiState: UIState;
 }
 
 const initialStore: State = {
@@ -70,6 +77,9 @@ const initialStore: State = {
         dim2Size: 1,
         dim3Size: 1,
         numberOfBaseColours: 0
+    },
+    uiState: {
+        showResizeModal: false
     }
 }
 
@@ -80,3 +90,4 @@ store.addReducer(new UpdateColour());
 store.addReducer(new ResizeImage());
 store.addReducer(new SetPixel());
 store.addReducer(new SetPixels());
+store.addReducer(new UpdateUIState());
