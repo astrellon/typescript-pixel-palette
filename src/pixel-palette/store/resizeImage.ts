@@ -23,10 +23,15 @@ export class ResizeImage extends Reducer<State>
     execute(state: State, action: ResizeImageAction): State
     {
         const newImage = {...state.image, width: action.width, height: action.height};
-        const pixels: number[]= new Array<number>(action.width * action.height);
-        for (let i = 0; i < pixels.length; i++)
+        const newPixels: number[][] = new Array<Array<number>>(action.height);
+        for (let y = 0; y < action.height; y++)
         {
-            pixels[i] = 0;
+            const newPixelRow = new Array<number>(action.width);
+            newPixels[y] = newPixelRow;
+            for (let x = 0; x < action.width; x++)
+            {
+                newPixelRow[x] = 0;
+            }
         }
 
         const minWidth = Math.min(state.image.width, action.width);
@@ -35,13 +40,11 @@ export class ResizeImage extends Reducer<State>
         for (let y = 0; y < minHeight; y++)
         for (let x = 0; x < minWidth; x++)
         {
-            const origIndex = y * state.image.width + x;
-            const newIndex = y * action.width + x;
-
-            pixels[newIndex] = state.image.pixelIndices[origIndex];
+            newPixels[y][x] = state.image.pixelIndices[y][x];
         }
 
-        newImage.pixelIndices = pixels;
+        newImage.pixelIndices = newPixels;
+        newImage.toolPixelIndices = [];
 
         return {...state, image: newImage};
     }

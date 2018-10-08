@@ -8,14 +8,14 @@ export interface SetPixelsAction extends Action
     y: number,
     width: number,
     height: number,
-    pixels: number[],
+    pixels: number[][],
 }
 
 export class SetPixels extends Reducer<State>
 {
-    static action(x: number, y: number, width: number, height: number, pixels: number[]): SetPixelsAction
+    static action(x: number, y: number, width: number, height: number, pixels: number[][]): SetPixelsAction
     {
-        if (pixels.length !== width * height)
+        if (pixels.length !== height)
         {
             throw new Error('Pixels must be width * height');
         }
@@ -30,18 +30,20 @@ export class SetPixels extends Reducer<State>
 
     execute(state: State, action: SetPixelsAction): State
     {
-        const pixels: number[]= [...state.image.pixelIndices];
+        const newPixels: number[][] = [...state.image.toolPixelIndices] as number[][];
         const maxY = Math.min(state.image.height, action.height + action.y);
         const maxX = Math.min(state.image.width, action.width + action.x);
         for (let y = action.y; y < maxY; y++)
-        for (let x = action.x; x < maxX; x++)
         {
-            const imageIndex = y * state.image.width + x;
-            const actionIndex = (y - action.y) * action.width + (x - action.x);
-
-            pixels[imageIndex] = action.pixels[actionIndex];
+            const row = newPixels[y];
+            const newPixelRow = !!row ? [...row] : [];
+            newPixels[y] = newPixelRow;
+            for (let x = action.x; x < maxX; x++)
+            {
+                newPixelRow[x] = action.pixels[y - action.y][x - action.x];
+            }
         }
-        const newImage: ImageState = {...state.image, pixelIndices: pixels};
+        const newImage: ImageState = {...state.image, toolPixelIndices: newPixels};
 
         return {...state, image: newImage};
     }

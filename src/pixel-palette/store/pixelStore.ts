@@ -5,12 +5,14 @@ import { ResizeImage } from "./resizeImage";
 import { SetPixel } from "./setPixel";
 import { SetPixels } from "./setPixels";
 import { UpdateUIState } from "./updateUIState";
+import { ImageTransaction } from "./imageTransaction";
 
 export interface ImageState
 {
     width: number;
     height: number;
-    pixelIndices: ReadonlyArray<number>
+    pixelIndices: ReadonlyArray<ReadonlyArray<number>>;
+    toolPixelIndices: ReadonlyArray<ReadonlyArray<number | undefined>>;
 }
 
 function toHex(input: number)
@@ -24,12 +26,12 @@ function toHex(input: number)
 }
 
 export interface ColourState {
-    red: number, 
-    green: number, 
-    blue: number, 
+    red: number,
+    green: number,
+    blue: number,
     alpha: number
 };
-    
+
 export function toHexString(colour: ColourState): string
 {
     return toHex(colour.red) + toHex(colour.green) + toHex(colour.blue);
@@ -63,13 +65,16 @@ export interface State
     image: ImageState;
     palette: PaletteState;
     uiState: UIState;
+
+    editingImage: boolean;
 }
 
 const initialStore: State = {
     image: {
         height: 0,
         width: 0,
-        pixelIndices: []
+        pixelIndices: [],
+        toolPixelIndices: []
     },
     palette: {
         colourMap: {},
@@ -80,7 +85,9 @@ const initialStore: State = {
     },
     uiState: {
         showResizeModal: false
-    }
+    },
+
+    editingImage: false
 }
 
 export const store = new Store<State>(initialStore);
@@ -91,3 +98,4 @@ store.addReducer(new ResizeImage());
 store.addReducer(new SetPixel());
 store.addReducer(new SetPixels());
 store.addReducer(new UpdateUIState());
+store.addReducer(new ImageTransaction());

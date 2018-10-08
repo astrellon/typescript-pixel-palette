@@ -25,7 +25,7 @@ store.dispatch(UpdateColour.action(1, {red: 0, green: 255, blue: 0, alpha: 255})
 store.dispatch(UpdateColour.action(2, {red: 0, green: 0, blue: 255, alpha: 255}));
 store.dispatch(UpdateColour.action(3, {red: 255, green: 255, blue: 255, alpha: 255}));
 store.dispatch(ResizeImage.action(5, 5));
-store.dispatch(SetPixels.action(1, 1, 3, 3, [1, 2, 3, 2, 3, 1, 3, 1, 2]));
+store.dispatch(SetPixels.action(1, 1, 3, 3, [[1, 2, 3], [2, 3, 1], [3, 1, 2]]));
 
 store.subscribeAny(render);
 

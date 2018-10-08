@@ -1,11 +1,10 @@
 import React, { ChangeEvent, MouseEvent } from "react";
-import Image from "./image";
-import Palette from "./palette";
 import ImageRender from "./imageRender";
 import PaletteRender, { ColoursProps } from "./paletteRender";
 import EditTool from "./editTool";
 import { ImageState, PaletteState, store } from "./store/pixelStore";
 import { ResizePalette } from "./store/resizePalette";
+import { ImageTransaction } from "./store/imageTransaction";
 
 export interface Position
 {
@@ -47,6 +46,15 @@ export default class EditView extends React.Component<Props, State>
             paletteEditMode: false,
             selectedIndex: 0
         }
+
+        document.body.addEventListener('keydown', (e) =>
+            {
+                if (e.which === 27)
+                {
+                    store.dispatch(ImageTransaction.cancel());
+                    this.endMouse();
+                }
+            })
     }
 
     handleDimOffset(event: ChangeEvent<HTMLInputElement>, prop: string)
@@ -59,7 +67,7 @@ export default class EditView extends React.Component<Props, State>
         const currentValue: number = this.props.palette[prop];
         store.dispatch(ResizePalette.action({[prop]: currentValue + diff}));
     }
-    
+
     getCanvasPosition(e: MouseEvent<HTMLElement>): Position
     {
         const rect = (this.refs.editImage as HTMLElement).getBoundingClientRect();
@@ -75,7 +83,7 @@ export default class EditView extends React.Component<Props, State>
         this.prevPos = pos;
         this.mouseDownPos = pos;
         this.isMouseDown = true;
-        
+
         if (this.props.currentTool != null)
         {
             this.props.currentTool.onMouseDown(this, pos);
@@ -95,18 +103,28 @@ export default class EditView extends React.Component<Props, State>
 
         this.prevPos = pos;
     }
-    
+
     onMouseUp(event: MouseEvent<HTMLElement>)
     {
+        if (!this.isMouseDown)
+        {
+            return;
+        }
+
         const pos = this.getCanvasPosition(event);
         this.prevPos = pos;
-        this.isMouseDown = false;
-        
+        this.endMouse();
+
         if (this.props.currentTool != null)
         {
             this.props.currentTool.onMouseUp(this, this.mouseDownPos, pos);
             this.forceUpdate();
         }
+    }
+
+    endMouse()
+    {
+        this.isMouseDown = false;
     }
 
     selectColour(baseColour: number)
@@ -123,14 +141,14 @@ export default class EditView extends React.Component<Props, State>
     {
         const colourProps: ColoursProps = {
             palette: this.props.palette,
-            dim1Offset: this.state.dim1Offset, 
+            dim1Offset: this.state.dim1Offset,
             dim2Offset: this.state.dim2Offset,
             dim3Offset: this.state.dim3Offset,
             selectedIndex: this.state.selectedIndex
         }
 
         return <div className="edit-view">
-                <div ref="editImage" className="edit-view__contents" 
+                <div ref="editImage" className="edit-view__contents"
                     onMouseDown={(e) => this.onMouseDown(e)}
                     onMouseMove={(e) => this.onMouseMove(e)}
                     onMouseUp={(e) => this.onMouseUp(e)} >
@@ -161,7 +179,7 @@ export default class EditView extends React.Component<Props, State>
                 </label>
 
                 <button onClick={() => this.togglePaletteEdit()}>Toggle Palette Edit</button>
-                <PaletteRender 
+                <PaletteRender
                     colourProps={colourProps}
                     onSelect={(baseColour) => this.selectColour(baseColour)}
                     editColours={this.state.paletteEditMode}

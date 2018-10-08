@@ -1,5 +1,6 @@
 import { Action, Reducer } from "./store";
 import { State, ImageState } from "./pixelStore";
+import { set2dArrayImmutable } from "../utils";
 
 export const SetPixelActionType = 'SET_PIXEL';
 export interface SetPixelAction extends Action
@@ -23,9 +24,8 @@ export class SetPixel extends Reducer<State>
 
     execute(state: State, action: SetPixelAction): State
     {
-        const pixels: number[]= [...state.image.pixelIndices];
-        pixels[action.y * state.image.width + action.x] = action.baseColour;
-        const newImage: ImageState = {...state.image, pixelIndices: pixels};
+        const newToolPixels = set2dArrayImmutable(state.image.toolPixelIndices, action.x, action.y, action.baseColour);
+        const newImage: ImageState = { ...state.image, toolPixelIndices: newToolPixels };
 
         return {...state, image: newImage};
     }

@@ -48,29 +48,56 @@ export default class ImageRender extends React.Component<Props, State>
             height: image.height * this.props.zoom
         }
 
-        return <canvas className="image" 
-                ref="canvas" 
-                width={image.width} 
-                height={image.height}
-                style={canvasStyle}/>;
+        return (
+            <div className="image" style={canvasStyle}>
+                <canvas className="image__canvas"
+                    ref="canvas"
+                    width={image.width}
+                    height={image.height}
+                    style={canvasStyle} />
+
+                <canvas className="image__canvas"
+                    ref="toolCanvas"
+                    width={image.width}
+                    height={image.height}
+                    style={canvasStyle} />
+            </div>
+        );
     }
-    
+
     update()
     {
-        const canvas = this.refs.canvas as HTMLCanvasElement;
+        this.renderToCanvas(this.refs.canvas as HTMLCanvasElement, this.props.image.pixelIndices);
+        this.renderToCanvas(this.refs.toolCanvas as HTMLCanvasElement, this.props.image.toolPixelIndices);
+    }
+
+    renderToCanvas(canvas: HTMLCanvasElement, pixels: ReadonlyArray<ReadonlyArray<number>>)
+    {
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        let i = 0;
         for (let y = 0; y < this.props.image.height; y++)
-        for (let x = 0; x < this.props.image.width; x++)
         {
-            const index = this.props.image.pixelIndices[i++];
-            const paletteIndex = Palette.makeIndex(index, this.props.dim1Offset, this.props.dim2Offset, this.props.dim3Offset);
-            const colour = this.props.palette.colourMap[paletteIndex] || this.props.palette[index] || {red: 255, green: 0, blue: 255, alpha: 255};
+            const row = pixels[y];
+            if (!row)
+            {
+                continue;
+            }
 
-            ctx.fillStyle = toRgbString(colour);
-            ctx.fillRect(x, y, 1, 1);
+            for (let x = 0; x < this.props.image.width; x++)
+            {
+                const index = row[x];
+                if (index == undefined)
+                {
+                    continue;
+                }
+
+                const paletteIndex = Palette.makeIndex(index, this.props.dim1Offset, this.props.dim2Offset, this.props.dim3Offset);
+                const colour = this.props.palette.colourMap[paletteIndex] || this.props.palette[index] || { red: 255, green: 0, blue: 255, alpha: 255 };
+
+                ctx.fillStyle = toRgbString(colour);
+                ctx.fillRect(x, y, 1, 1);
+            }
         }
     }
 }
