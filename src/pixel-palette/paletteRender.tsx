@@ -40,7 +40,9 @@ class PaletteColours extends React.PureComponent<ColoursProps>
                 const style = {
                     backgroundColor: toRgbString(colour)
                 };
-                const className = 'palette-colour' + (this.props.selectedIndex === i ? ' palette-colour__selected' : '');
+
+                const selectedBaseColour = Palette.getBaseColour(this.props.selectedIndex);
+                const className = 'palette-colour' + (selectedBaseColour === i ? ' is--selected' : '');
 
                 result.push(<div key={index} className={className} style={style} data-index={index}>
                         <div ref="preview" className="palette-colour__preview"></div>
@@ -97,7 +99,7 @@ export default class PaletteRender extends React.Component<Props>
             const parsed = PureColour.parse(result);
             const newColour = new Colour(parsed[0], parsed[1], parsed[2], Math.floor(parsed[3] * 256));
             store.dispatch(UpdateColour.action(index, newColour));
-        }} color={`#${toHexString(colour)}`} alpha={colour.alpha} opacitySlider /> 
+        }} color={`#${toHexString(colour)}`} alpha={colour.alpha} opacitySlider />
     }
 
     render()
@@ -105,17 +107,17 @@ export default class PaletteRender extends React.Component<Props>
         const colourProps = this.props.colourProps;
         return (
             <div>
-                { this.props.editColours ? 
-                    this.renderColourPicker() 
-                    : null 
+                { this.props.editColours ?
+                    this.renderColourPicker()
+                    : null
                 }
                 <div onClick={(e) => this.onPaletteClick(e)}>
-                    <PaletteColours 
+                    <PaletteColours
                         ref="colours"
-                        palette={colourProps.palette} 
-                        dim1Offset={colourProps.dim1Offset} 
-                        dim2Offset={colourProps.dim2Offset} 
-                        dim3Offset={colourProps.dim3Offset} 
+                        palette={colourProps.palette}
+                        dim1Offset={colourProps.dim1Offset}
+                        dim2Offset={colourProps.dim2Offset}
+                        dim3Offset={colourProps.dim3Offset}
                         selectedIndex={colourProps.selectedIndex}
                         />
                 </div>
