@@ -2,9 +2,10 @@ import React, { ChangeEvent, MouseEvent } from "react";
 import ImageRender from "./imageRender";
 import PaletteRender, { ColoursProps } from "./paletteRender";
 import EditTool from "./editTool";
-import { ImageState, PaletteState, store } from "./store/pixelStore";
+import { ImageState, PaletteState, store, ColourState } from "./store/pixelStore";
 import { ResizePalette } from "./store/resizePalette";
 import { ImageTransaction } from "./store/imageTransaction";
+import { UpdateColour } from "./store/updateColour";
 
 export interface Position
 {
@@ -26,6 +27,11 @@ interface State
     zoom: number,
     paletteEditMode: boolean,
     selectedIndex: number
+}
+
+function randColour(): number
+{
+    return Math.floor(Math.random() * 256.0);
 }
 
 export default class EditView extends React.Component<Props, State>
@@ -137,6 +143,20 @@ export default class EditView extends React.Component<Props, State>
         this.setState({...this.state, paletteEditMode: !this.state.paletteEditMode});
     }
 
+    addPaletteColour()
+    {
+        const numColours = this.props.palette.numberOfBaseColours + 1;
+        store.dispatch(ResizePalette.action({numberOfBaseColours: numColours}));
+
+        const newColour: ColourState = {
+            red: randColour(),
+            green: randColour(),
+            blue: randColour(),
+            alpha: 255
+        }
+        store.dispatch(UpdateColour.action(numColours, newColour));
+    }
+
     render()
     {
         const colourProps: ColoursProps = {
@@ -179,6 +199,7 @@ export default class EditView extends React.Component<Props, State>
                 </label>
 
                 <button onClick={() => this.togglePaletteEdit()}>Toggle Palette Edit</button>
+                <button onClick={() => this.addPaletteColour()}>Add Colour</button>
                 <PaletteRender
                     colourProps={colourProps}
                     onSelect={(baseColour) => this.selectColour(baseColour)}

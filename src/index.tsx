@@ -60,3 +60,8 @@ function closeResize()
 {
     store.dispatch(UpdateUIState.action(false));
 }
+
+function savePalette()
+{
+
+}

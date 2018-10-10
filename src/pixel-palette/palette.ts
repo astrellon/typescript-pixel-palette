@@ -86,8 +86,13 @@ export default class Palette
         this.onUpdateCallback();
     }
 
-    static makeIndex(baseColour: number, dim1: number, dim2: number, dim3: number)
+    static makeIndex(baseColour: number, dim1: number, dim2: number, dim3: number): number
     {
         return (dim3 & 0xFF) << 24 | (dim2 & 0xFF) << 16 | (dim1 & 0xFF) << 8 | (baseColour & 0xFF);
+    }
+
+    static getBaseColour(index: number): number
+    {
+        return index & 0xFF;
     }
 }
